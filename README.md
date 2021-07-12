@@ -2,6 +2,8 @@
 
 
 This is a Data Analysis using Github API project
+# Live Demo
+https://stupefied-ritchie-fedeb2.netlify.app/
 
 ## Running locally in development mode
 
