@@ -1,17 +1,11 @@
 import { all, call, delay, put, take, takeLatest } from 'redux-saga/effects'
-import { actionTypes, failure, loadDataSuccess, tickClock } from './actions'
+import { actionTypes, failure, loadDataSuccess, loadData2Success } from './actions'
 
-function* runClockSaga() {
-  yield take(actionTypes.START_CLOCK)
-  while (true) {
-    yield put(tickClock(false))
-    yield delay(1000)
-  }
-}
 
-function* loadDataSaga() {
+function* loadDataSaga(action) {
+  
   try {
-    const res = yield fetch('https://jsonplaceholder.typicode.com/users')
+    const res = yield fetch('https://api.github.com/search/repositories?'+action.arg)
     const data = yield res.json()
     yield put(loadDataSuccess(data))
   } catch (err) {
@@ -19,10 +13,21 @@ function* loadDataSaga() {
   }
 }
 
+function* loadDataSaga2(action) {
+  
+  try {
+    const res = yield fetch('https://api.github.com/repos/facebook/react/stats/commit_activity?'+action.arg)
+    const data = yield res.json()
+    yield put(loadData2Success(data))
+  } catch (err) {
+    yield put(failure(err))
+  }
+}
+
 function* rootSaga() {
   yield all([
-    call(runClockSaga),
     takeLatest(actionTypes.LOAD_DATA, loadDataSaga),
+    takeLatest(actionTypes.LOAD_DATA2, loadDataSaga2),
   ])
 }
 

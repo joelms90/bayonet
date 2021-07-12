@@ -1,29 +1,29 @@
-import { useEffect } from 'react'
-import { useDispatch } from 'react-redux'
-import { END } from 'redux-saga'
-import { wrapper } from '../store'
-import { loadData, startClock, tickClock } from '../actions'
-import Page from '../components/page'
-
+import { END } from "redux-saga";
+import { wrapper } from "../store";
+import { loadData } from "../actions";
+import Page from "../components/page";
+import BarChart from "/components/bar";
 const Index = () => {
-  const dispatch = useDispatch()
-
-  useEffect(() => {
-    dispatch(startClock())
-  }, [dispatch])
-
-  return <Page title="Index Page" linkTo="/other" NavigateTo="Other Page" />
-}
+  return (
+    <>
+      <Page
+        title="Top 20 repositories on Github"
+        linkTo="/other"
+        NavigateTo="Web Page 2"
+      />
+      <BarChart />
+    </>
+  );
+};
 
 export const getStaticProps = wrapper.getStaticProps(async ({ store }) => {
-  store.dispatch(tickClock(false))
-
-  if (!store.getState().placeholderData) {
-    store.dispatch(loadData())
-    store.dispatch(END)
+  if (!store.getState()?.placeholderData) {
+    const query = "q=stars:>1&page=1&per_page=20";
+    store.dispatch(loadData(query));
+    store.dispatch(END);
   }
 
-  await store.sagaTask.toPromise()
-})
+  await store.sagaTask.toPromise();
+});
 
-export default Index
+export default Index;

@@ -7,6 +7,7 @@ const initialState = {
   lastUpdate: 0,
   light: false,
   placeholderData: null,
+  placeholderData2: null,
 }
 
 function reducer(state, action) {
@@ -43,6 +44,12 @@ function reducer(state, action) {
       return {
         ...state,
         ...{ placeholderData: action.data },
+      }
+
+    case actionTypes.LOAD_DATA2_SUCCESS:
+      return {
+        ...state,
+        ...{ placeholderData2: action.data },
       }
 
     case actionTypes.TICK_CLOCK:

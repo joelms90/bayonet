@@ -1,21 +1,29 @@
-import { useEffect } from 'react'
-import { useDispatch } from 'react-redux'
-import { wrapper } from '../store'
-import { startClock, tickClock } from '../actions'
-import Page from '../components/page'
-
+import { END } from "redux-saga";
+import { wrapper } from "../store";
+import { loadData2 } from "../actions";
+import Page from "../components/page";
+import LineChart from "/components/line";
 const Other = () => {
-  const dispatch = useDispatch()
-
-  useEffect(() => {
-    dispatch(startClock())
-  }, [dispatch])
-
-  return <Page title="Other Page" linkTo="/" NavigateTo="Index Page" />
-}
+  return (
+    <>
+      <Page
+        title="Last 10 weeks of commit activity on the React Github"
+        linkTo="/"
+        NavigateTo="Web Page 1"
+      />
+      <LineChart />
+    </>
+  );
+};
 
 export const getStaticProps = wrapper.getStaticProps(async ({ store }) => {
-  store.dispatch(tickClock(false))
-})
+  if (!store.getState()?.placeholderData2) {
+    const query2 = "q=page=1&per_page=10";
+    store.dispatch(loadData2(query2));
+    store.dispatch(END);
+  }
 
-export default Other
+  await store.sagaTask.toPromise();
+});
+
+export default Other;
