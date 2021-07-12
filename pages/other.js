@@ -3,6 +3,7 @@ import { wrapper } from "../store";
 import { loadData2 } from "../actions";
 import Page from "../components/page";
 import LineChart from "/components/line";
+
 const Other = () => {
   return (
     <>
